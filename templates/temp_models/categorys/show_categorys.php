@@ -2,11 +2,13 @@
 include('temp_parts/navbar.php');
 include('temp_parts/sidebar.php');
 include('dashboard_base.php');
+include('../../../database/databaseConnection.php');
+
 ?>
 
 <div class="wrapper">	
   <!-- /.content-wrapper -->
-<div class="content-wrapper">
+  <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -30,47 +32,61 @@ include('dashboard_base.php');
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-        <table class="table">
-       <thead>
-              <tr>
-                <th>#</th>
-                   <th>التصنيف</th>
-                 
-              </tr>
-        </thead>
+          <table class="table">
+           <thead>
+            <tr>
+              <th>#</th>
+              <th>التصنيف</th>
+              
+            </tr>
+          </thead>
 
 
-         <tbody>
-                        
-             <tr>
-                    <td>
-                          
+          <tbody>
+            
+           <?php 
+           $query = "SELECT id,category_name from categorys";
 
-                    </td>
+           $result = mysqli_query($connection,$query);
 
-                   <td>
-                            
+           if(mysqli_num_rows($result)>0){
 
-                   </td>
+            while ($row =  mysqli_fetch_assoc($result)) {
+              echo '<tr>'.'<td>'.$row['id'].'</td>'.'<td>'.$row['category_name'].'</td>'.'<td><a class="btn btn-info btn-sm" href="edit_category.php?id='.$row['id'] .'">تعديل</a></td>'. 
+              '<td><form action="delete_category.php" method="POST">
+              <input type="hidden" name="id-category" value="'.$row['id'].'">
+              <button class="btn btn-danger btn-sm" type="button" class="btn-danger" id="delete-btn">حذف</button>
+              </form></td>'.'</tr>';
+            }
+          }
 
-                   <td>
-                   <a class="btn btn-info btn-sm" href="">تعديل</a>
-                    <a class="btn btn-danger btn-sm"  href="">حذف</a>
-                   </td>
+          mysqli_close($connection);
+          ?>
+          
+        </tbody>
 
-             </tr>
-                    
-       </tbody>
-
- </table>
+      </table>
 
 
-        <!-- /.row -->
-        <!-- /.row (main row) -->
-   	 </div>
- </div><!-- /.container-fluid -->
+      <!-- /.row -->
+      <!-- /.row (main row) -->
+    </div>
+  </div><!-- /.container-fluid -->
 </section>
-    <!-- /.content -->
+<!-- /.content -->
 </div>
 
 </div>
+<script type="text/javascript">
+ 
+  $('button').click(function (event) {
+    event.preventDefault();
+    var result=confirm("Are you sure?");
+    if(result == true){
+      $(this).parent('form').submit();
+    }
+    
+  });
+
+
+</script>

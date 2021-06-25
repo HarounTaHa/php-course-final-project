@@ -51,20 +51,16 @@ include('../../../database/databaseConnection.php');
             if(mysqli_num_rows($result)>0){
 
                   while ($row =  mysqli_fetch_assoc($result)) {
-                    echo '<tr>'.'<td>'.$row['id'].'</td>'.'<td>'.$row['authorName'].'</td>';
+            echo '<tr>'.'<td>'.$row['id'].'</td>'.'<td>'.$row['authorName'].'</td>'.'<td><a class="btn btn-info btn-sm" href="edit_author.php?id='.$row['id'] .'">تعديل</a></td>'.
+              '<td><form action="delete_author.php" method="POST">
+                <input type="hidden" name="id-author" value="'.$row['id'].'">
+                <button class="btn btn-danger btn-sm" type="button" class="btn-danger" id="delete-btn">حذف</button>
+                </form></td>'.'</tr>';
                   }
             }
 
             mysqli_close($connection);
           ?>
-
-
-        <td>
-             <a class="btn btn-info btn-sm" href="">تعديل</a>
-             <a class="btn btn-danger btn-sm"  href="">حذف</a>
-      </td>
-
-  </tr>
                     
        </tbody>
 
@@ -80,3 +76,16 @@ include('../../../database/databaseConnection.php');
 </div>
 
 </div>
+
+<script type="text/javascript">
+    $('button').click(function (event) {
+      event.preventDefault();
+      var result=confirm("Are you sure?");
+      if(result == true){
+      $(this).parent('form').submit();
+      }
+    
+    });
+
+
+</script>
